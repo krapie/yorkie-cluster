@@ -1,4 +1,4 @@
-# yorkie-tldraw
+# yorkie-kubernetes
 
 Yorkie cluster on kubernetes
 

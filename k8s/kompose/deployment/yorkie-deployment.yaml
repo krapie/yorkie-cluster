@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f ../../docker/yorkie-custom-docker/docker-compose.yml
+    kompose.version: 1.26.1 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: yorkie
+  name: yorkie
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: yorkie
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f ../../docker/yorkie-custom-docker/docker-compose.yml
+        kompose.version: 1.26.1 (HEAD)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: yorkie
+    spec:
+      containers:
+        - args:
+            - server
+            - --mongo-connection-uri
+            - mongodb://mongo:27017
+            - --enable-pprof
+          image: yorkieteam/yorkie:latest
+          name: yorkie
+          ports:
+            - containerPort: 11101
+            - containerPort: 11102
+            - containerPort: 11103
+          resources: {}
+      restartPolicy: Always
+status: {}

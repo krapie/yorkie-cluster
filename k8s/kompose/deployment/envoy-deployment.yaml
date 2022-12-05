@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f ../../docker/yorkie-custom-docker/docker-compose.yml
+    kompose.version: 1.26.1 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: envoy
+  name: envoy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: envoy
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f ../../docker/yorkie-custom-docker/docker-compose.yml
+        kompose.version: 1.26.1 (HEAD)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: envoy
+    spec:
+      containers:
+        - args:
+            - /etc/envoy/envoy.yaml
+          image: grpcweb:envoy
+          name: envoy
+          ports:
+            - containerPort: 8090
+            - containerPort: 9090
+            - containerPort: 9901
+          resources: {}
+      restartPolicy: Always
+status: {}

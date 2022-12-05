@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f ../../docker/yorkie-custom-docker/docker-compose.yml
+    kompose.version: 1.26.1 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: yorkie
+  name: yorkie
+spec:
+  ports:
+    - name: "11101"
+      port: 11101
+      targetPort: 11101
+    - name: "11102"
+      port: 11102
+      targetPort: 11102
+    - name: "11103"
+      port: 11103
+      targetPort: 11103
+  selector:
+    io.kompose.service: yorkie
+status:
+  loadBalancer: {}
