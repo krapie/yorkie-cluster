@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: yorkie-mongo-statefulset
+  namespace: yorkie
+  labels:
+    app: yorkie-mongo
+spec:
+  replicas: 1
+  serviceName: yorkie-mongo
+  selector:
+    matchLabels:
+      app: yorkie-mongo
+  template:
+    metadata:
+      labels:
+        app: yorkie-mongo
+    spec:
+      terminationGracePeriodSeconds: 60
+      containers:
+        - name: yorkie-mongo
+          image: mongo:latest
+          ports:
+            - containerPort: 27017
+      restartPolicy: Always
+      volumeMounts:
+        - name: mongo-persistent-storage
+          mountPath: /data/db
+      volumes:
+        - name: mongo-claim
+          persistentVolumeClaim:
+            claimName: mongo-claim
+            readOnly: true
