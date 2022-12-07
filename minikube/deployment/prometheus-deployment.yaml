@@ -1,12 +1,11 @@
 apiVersion: apps/v1
-kind: StatefulSet
+kind: Deployment
 metadata:
-  name: prometheus-statefulset
+  name: prometheus-deployment
   labels:
     app: prometheus
 spec:
   replicas: 1
-  serviceName: prometheus
   selector:
     matchLabels:
       app: prometheus
@@ -15,8 +14,6 @@ spec:
       labels:
         app: prometheus
     spec:
-      restartPolicy: Always
-      terminationGracePeriodSeconds: 60
       containers:
         - name: prometheus
           image: prom/prometheus:latest
@@ -26,21 +23,14 @@ spec:
           ports:
             - containerPort: 9090
           volumeMounts:
-            - name: prometheus-persistent-storage
-              mountPath: /etc/prometheus/
             - name: prometheus-config
+              mountPath: /etc/prometheus/
+            - name: prometheus-storage-volume
               mountPath: /prometheus/
           resources: {}
       volumes:
         - name: prometheus-config
           configMap:
             name: prometheus-configmap
-  volumeClaimTemplates:
-    - metadata:
-        name: prometheus-persistent-storage
-      spec:
-        accessModes: ["ReadWriteOnce"]
-        storageClassName: standard
-        resources:
-          requests:
-            storage: 400Mi
+        - name: prometheus-storage-volume
+          emptyDir: {}
