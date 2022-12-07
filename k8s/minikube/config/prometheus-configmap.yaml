@@ -3,11 +3,11 @@ kind: ConfigMap
 metadata:
   name: prometheus-config
 data:
-  scrape_configs:
-    - job_name: yorkie
-      metrics_path: /metrics
-      scrape_interval: 5s
-      static_configs:
-      - targets:
-        # win/mac hosts: Use address: host.docker.internal instead of address: localhost in the line below
-        - host.docker.internal:11102
+  prometheus.yml: |
+    scrape_configs:
+      - job_name: yorkie
+        metrics_path: /metrics
+        scrape_interval: 5s
+        static_configs:
+        - targets:
+          - yorkie-service:11102

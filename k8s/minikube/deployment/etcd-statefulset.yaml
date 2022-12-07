@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: etcd-statefulset
+  labels:
+    app: etcd
+spec:
+  replicas: 1
+  serviceName: etcd
+  selector:
+    matchLabels:
+      app: etcd
+  template:
+    metadata:
+      labels:
+        app: etcd
+    spec:
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 60
+      containers:
+        - name: etcd
+          image: bitnami/etcd:latest
+          ports:
+            - containerPort: 2379
+            - containerPort: 2380
+          volumeMounts:
+            - name: etcd-persistent-storage
+              mountPath: /var/run/etcd
+          env:
+            - name: ALLOW_NONE_AUTHENTICATION
+              value: "yes"
+            # - name: ETCD_AUTO_COMPACTION_MODE
+            #   value: "revision"
+            # - name: ETCD_AUTO_COMPACTION_RETENTION
+            #   value: "1000"
+  volumeClaimTemplates:
+    - metadata:
+        name: etcd-persistent-storage
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        storageClassName: standard
+        resources:
+          requests:
+            storage: 800Mi

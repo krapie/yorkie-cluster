@@ -1,21 +1,20 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: yorkie-server-service
-  namespace: yorkie
+  name: yorkie-service
   labels:
     app: yorkie-server
 spec:
-  type: NodePort
+  clusterIP: None
   selector:
     app: yorkie-server
   ports:
-    - name: "11101"
+    - name: sdk-port
       port: 11101
       targetPort: 11101
-    - name: "11102"
+    - name: profiling-port
       port: 11102
       targetPort: 11102
-    - name: "11103"
+    - name: admin-port
       port: 11103
       targetPort: 11103

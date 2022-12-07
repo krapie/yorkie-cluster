@@ -1,24 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: yorkie-grafana-deployment
-  namespace: yorkie
+  name: grafana-deployment
   labels:
-    app: yorkie-grafana
+    app: grafana
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: yorkie-grafana
+      app: grafana
   template:
     metadata:
-      annotations:
       labels:
-        app: yorkie-grafana
+        app: grafana
     spec:
       containers:
-        - image: grafana/grafana:latest
-          name: grafana
+        - name: grafana
+          image: grafana/grafana:latest
           ports:
             - containerPort: 3000
-      restartPolicy: Always
+          resources: {}
