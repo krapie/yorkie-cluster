@@ -3,7 +3,7 @@ kind: Ingress
 metadata:
   # using nginx ingress controller for minikube environment
   name: yorkie-ingress
-  namespace: default
+  namespace: yorkie
 spec:
   rules:
     - http:

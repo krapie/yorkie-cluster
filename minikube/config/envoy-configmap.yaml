@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: envoy-configmap
-  namespace: default
+  namespace: yorkie
   labels:
     app: envoy
 data:

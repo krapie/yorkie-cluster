@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: etcd-statefulset
-  namespace: default
+  namespace: yorkie
   labels:
     app: etcd
 spec:

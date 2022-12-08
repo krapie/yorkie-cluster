@@ -41,28 +41,32 @@ minikube addons enable ingress
 # 5. start minikube tunneling for local connection
 minikube tunnel
 
-# 6. deploy all minikube manifests in minikube cluster
+# 6. create yorkie namespace and switch context (optional)
+kubectl create namespace yorkie
+# kubectl config set-context --current --namespace yorkie
+
+# 7. deploy all minikube manifests in minikube cluster
 kubectl apply -f minikube --recursive
 
-# 7. test yorkie api!
+# 8. test yorkie api!
 const client = new yorkie.Client('http://localhost');
 ```
 
 For play with more fun stuff,
 
 ```bash
-# 8. deploy monitoring tools if you want to see metrics
+# 9. deploy monitoring tools if you want to see metrics
 #    (ignore json error, it's grafana json file, not k8s manifest file)
 kubectl apply -f monitoring --recursive
 
-# 9. enter grafana web url in your browser
+# 10. enter grafana web url in your browser
 curl http://localhost
 
-# 10. clone dashboard repository for admin dashboard!
+# 11. clone dashboard repository for admin dashboard!
 #     (change REACT_APP_ADMIN_ADDR to http://localhost)
 git clone https://github.com/yorkie-team/dashboard.git
 
-# 11. clone yorkie-tldraw repository for real-time collaboration whiteboard!
+# 12. clone yorkie-tldraw repository for real-time collaboration whiteboard!
 #     (change REACT_APP_YORKIE_RPC_ADDR to http://localhost)
 git clone https://github.com/Krapi0314/yorkie-tldraw.git
 ```

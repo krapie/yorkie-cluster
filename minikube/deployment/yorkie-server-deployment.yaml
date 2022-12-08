@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: yorkie-server-deployment
-  namespace: default
+  namespace: yorkie
   labels:
     app: yorkie-server
 spec:
