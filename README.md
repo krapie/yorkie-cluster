@@ -1,5 +1,8 @@
 # yorkie-kubernetes
 
+***WARNING: currently yorkie minikube cluster on `m1/arm64`***
+***is not working due to bitami/etcd have issues with `m1/arm64` architecture***
+
 Yorkie cluster on kubernetes
 
 ## Table of Contents
@@ -77,9 +80,9 @@ git clone https://github.com/Krapi0314/yorkie-tldraw.git
 
 - `kompose` : k8s manifests converted from yorkie docker-compose files
 - `minikube` : k8s manifests for local k8s cluster (minikube)
-  - **istio & envoy sidecar will be implemented in later updates.**
-  - **for now, istio is not implemented to simplify**
-    **yorkie cluster architecture in local environment, and also instruction guide**
+  - ***istio & envoy sidecar will be implemented in later updates.***
+  - ***for now, istio is not implemented to simplify***
+    ***yorkie cluster architecture in local environment, and also instruction guide***
 - `monitoring` : k8s manifest for monitoring tool (prometheus & grafana)
 
 ### Minikube Structure
