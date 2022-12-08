@@ -2,10 +2,11 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: yorkie-server-deployment
+  namespace: default
   labels:
     app: yorkie-server
 spec:
-  replicas: 2
+  replicas: 3
   selector:
     matchLabels:
       app: yorkie-server
@@ -16,6 +17,8 @@ spec:
     spec:
       containers:
         - name: yorkie
+          # env will be configured in later updates
+          # (including secrets for certain variables)
           args:
             - server
             - --mongo-connection-uri
@@ -28,4 +31,6 @@ spec:
             - containerPort: 11101
             - containerPort: 11102
             - containerPort: 11103
+          # resources will be configured in later updates
+          # (need to load test to configure resource capacity)
           resources: {}

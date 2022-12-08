@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: grafana-deployment
+  namespace: default
   labels:
     app: grafana
 spec:
@@ -19,4 +20,6 @@ spec:
           image: grafana/grafana:latest
           ports:
             - containerPort: 3000
+          # resources will be configured in later updates
+          # (need to load test to configure resource capacity)
           resources: {}

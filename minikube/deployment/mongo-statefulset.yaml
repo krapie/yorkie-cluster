@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: mongo-statefulset
+  namespace: default
   labels:
     app: mongo
 spec:
@@ -25,6 +26,9 @@ spec:
           volumeMounts:
             - name: mongo-persistent-storage
               mountPath: /data/db
+          # resources will be configured in later updates
+          # (need to load test to configure resource capacity)
+          resources: {}
   volumeClaimTemplates:
     - metadata:
         name: mongo-persistent-storage

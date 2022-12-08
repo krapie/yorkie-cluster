@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: prometheus-deployment
+  namespace: default
   labels:
     app: prometheus
 spec:
@@ -27,6 +28,8 @@ spec:
               mountPath: /etc/prometheus/
             - name: prometheus-storage-volume
               mountPath: /prometheus/
+          # resources will be configured in later updates
+          # (need to load test to configure resource capacity)
           resources: {}
       volumes:
         - name: prometheus-config

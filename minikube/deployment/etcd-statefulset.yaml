@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: etcd-statefulset
+  namespace: default
   labels:
     app: etcd
 spec:
@@ -33,6 +34,9 @@ spec:
               value: "revision"
             - name: ETCD_AUTO_COMPACTION_RETENTION
               value: "1000"
+          # resources will be configured in later updates
+          # (need to load test to configure resource capacity)
+          resources: {}
   volumeClaimTemplates:
     - metadata:
         name: etcd-persistent-storage

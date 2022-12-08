@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: envoy-deployment
+  namespace: default
   labels:
     app: envoy
 spec:
@@ -21,6 +22,8 @@ spec:
             - containerPort: 8080
             - containerPort: 9090
             - containerPort: 9901
+          # resources will be configured in later updates
+          # (need to load test to configure resource capacity)
           resources: {}
           volumeMounts:
             - name: envoy-config

@@ -1,7 +1,9 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
+  # using nginx ingress controller for minikube environment
   name: yorkie-ingress
+  namespace: default
 spec:
   rules:
     - http:
@@ -20,10 +22,11 @@ spec:
                 name: envoy-service
                 port:
                   number: 9090
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: grafana-service
-                port:
-                  number: 3000
+          # uncomment this section if you deployed monitoring manifests
+          # - path: /
+          #   pathType: Prefix
+          #   backend:
+          #     service:
+          #       name: grafana-service
+          #       port:
+          #         number: 3000

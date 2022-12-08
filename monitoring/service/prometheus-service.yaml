@@ -2,6 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: protetheus-service
+  namespace: default
   labels:
     app: protetheus
 spec:
