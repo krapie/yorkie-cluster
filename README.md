@@ -9,6 +9,7 @@ Yorkie cluster on kubernetes
   - [Instructions](#instructions)
 - [Development](#development)
   - [Project Structure](#project-structure)
+  - [Minikube Structure](#minikube-structure)
   - [About Yorkie](#about-yorkie)
 - [Roadmap](#roadmap)
 
@@ -72,9 +73,22 @@ git clone https://github.com/Krapi0314/yorkie-tldraw.git
 
 - `kompose` : k8s manifests converted from yorkie docker-compose files
 - `minikube` : k8s manifests for local k8s cluster (minikube)
-  - **istio & envoy sidecar is not implemented to simplify**
+  - **istio & envoy sidecar will be implemented in later updates.**
+  - **for now, istio is not implemented to simplify**
     **yorkie cluster architecture in local environment, and also instruction guide**
 - `monitoring` : k8s manifest for monitoring tool (prometheus & grafana)
+
+### Minikube Structure
+
+![argocd screenshot](./screenshot/argocd.PNG)
+
+In minikube yorie cluster, there are:
+
+- `yorkie-ingress` : ingress (lb, gw) for routing yorkie related services
+  - `envoy-service` -> `envoy pod` : envoy proxy for web connection & routing api, 1 replica exists
+    - `yorkie-service` -> `yorkie pods` : yorkie api server, 3 replica exists
+      - `etcd-service` -> `etcd stateful pod` : etcd for cluster mode, 1 replica exists
+      - `mongo-service` -> `mongo stateful pod` : mongodb for nosql db, 1 replica exists
 
 ### About Yorkie
 
@@ -89,7 +103,8 @@ Yorkie references
 
 ## Roadmap
 
-- [x] yorkie broadcasting cluster mode on minikube (local)
+- [x] yorkie broadcasting cluster mode on minikube (local, simple version)
+- [ ] yorkie broadcasting cluster mode on minikube (istio & envoy sidecar)
 - [ ] yorkie broadcasting cluster mode on GKE (cloud)
 - [ ] yorkie cluster mode (other architectural approach) on minikube (local)
 - [ ] yorkie cluster mode (other architectural approach) on GKE (cloud)
