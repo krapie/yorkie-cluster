@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: yorkie-server-deployment
+  name: yorkie-server
   namespace: yorkie
   labels:
     app: yorkie-server
@@ -17,16 +17,16 @@ spec:
     spec:
       containers:
         - name: yorkie
+          image: yorkieteam/yorkie:latest
           # env will be configured in later updates
           # (including secrets for certain variables)
           args:
             - server
             - --mongo-connection-uri
-            - mongodb://mongo-service:27017
+            - mongodb://mongo:27017
             - --etcd-endpoints
-            - http://etcd-service:2379
+            - http://etcd:2379
             - --enable-pprof
-          image: yorkieteam/yorkie:latest
           ports:
             - containerPort: 11101
             - containerPort: 11102

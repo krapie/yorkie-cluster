@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: envoy-service
+  name: envoy
   namespace: yorkie
   labels:
     app: envoy

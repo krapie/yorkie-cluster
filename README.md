@@ -1,8 +1,5 @@
 # yorkie-kubernetes
 
-***WARNING: currently yorkie minikube cluster on `m1/arm64`***
-***is not working due to bitami/etcd have issues with `m1/arm64` architecture***
-
 Yorkie cluster on kubernetes
 
 ## Table of Contents
@@ -94,7 +91,7 @@ In minikube yorie cluster, there are:
 - `yorkie-ingress` : ingress (lb, gw) for routing yorkie related services
   - `envoy-service` -> `envoy pod` : envoy proxy for web connection & routing api, 1 replica exists
     - `yorkie-service` -> `yorkie pods` : yorkie api server, 3 replica exists
-      - `etcd-service` -> `etcd stateful pod` : etcd for cluster mode, 1 replica exists
+      - `etcd-service` -> `etcd stateful pod` : etcd for cluster mode, 2 replica exists
       - `mongo-service` -> `mongo stateful pod` : mongodb for nosql db, 1 replica exists
 
 ### About Yorkie

@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: envoy-deployment
+  name: envoy
   namespace: yorkie
   labels:
     app: envoy
@@ -16,7 +16,7 @@ spec:
         app: envoy
     spec:
       containers:
-        - name: envoy-sidecar
+        - name: envoy
           image: grpcweb/envoy
           ports:
             - containerPort: 8080
@@ -31,4 +31,4 @@ spec:
       volumes:
         - name: envoy-config
           configMap:
-            name: envoy-configmap
+            name: envoy-config

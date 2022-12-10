@@ -2,7 +2,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   # using nginx ingress controller for minikube environment
-  name: yorkie-ingress
+  name: yorkie
   namespace: yorkie
 spec:
   rules:
@@ -12,14 +12,14 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: envoy-service
+                name: envoy
                 port:
                   number: 8080
           - path: /yorkie.v1.AdminService
             pathType: Prefix
             backend:
               service:
-                name: envoy-service
+                name: envoy
                 port:
                   number: 9090
           # uncomment this section if you deployed monitoring manifests

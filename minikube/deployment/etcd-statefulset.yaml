@@ -1,12 +1,12 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: etcd-statefulset
+  name: etcd
   namespace: yorkie
   labels:
     app: etcd
 spec:
-  replicas: 1
+  replicas: 2
   serviceName: etcd
   selector:
     matchLabels:
@@ -20,20 +20,29 @@ spec:
       terminationGracePeriodSeconds: 60
       containers:
         - name: etcd
-          image: bitnami/etcd:latest
+          image: quay.io/coreos/etcd:latest
+          command:
+            - /bin/sh
+            - -c
+            - |
+              PEERS="etcd-0=http://etcd-0:2380,etcd-1=http://etcd-1:2380"
+              exec etcd --name ${HOSTNAME} \
+              --listen-peer-urls http://0.0.0.0:2380 \
+              --listen-client-urls http://0.0.0.0:2379 \
+              --advertise-client-urls http://${HOSTNAME}:2379 \
+              --initial-advertise-peer-urls http://${HOSTNAME}:2380 \
+              --initial-cluster-token etcd-cluster-1 \
+              --initial-cluster ${PEERS} \
+              --initial-cluster-state new \
+              --data-dir /var/run/etcd/default.etcd \
+              --auto-compaction-mode revision \
+              --auto-compaction-retention 1000
           ports:
             - containerPort: 2379
             - containerPort: 2380
           volumeMounts:
             - name: etcd-persistent-storage
               mountPath: /var/run/etcd
-          env:
-            - name: ALLOW_NONE_AUTHENTICATION
-              value: "yes"
-            - name: ETCD_AUTO_COMPACTION_MODE
-              value: "revision"
-            - name: ETCD_AUTO_COMPACTION_RETENTION
-              value: "1000"
           # resources will be configured in later updates
           # (need to load test to configure resource capacity)
           resources: {}

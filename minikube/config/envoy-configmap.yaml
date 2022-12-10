@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: envoy-configmap
+  name: envoy-config
   namespace: yorkie
   labels:
     app: envoy
@@ -91,7 +91,7 @@ data:
             - endpoint:
                 address:
                   socket_address:
-                    address: yorkie-service
+                    address: yorkie
                     port_value: 11101
       - name: admin_service
         connect_timeout: 0.25s
@@ -105,5 +105,5 @@ data:
             - endpoint:
                 address:
                   socket_address:
-                    address: yorkie-service
+                    address: yorkie
                     port_value: 11103
