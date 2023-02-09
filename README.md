@@ -27,7 +27,7 @@ just clone this repository and follow instructions bellow.
 
 ```bash
 # 1. clone repository
-git clone https://github.com/Krapi0314/yorkie-kubernetes.git
+git clone https://github.com/krapie/yorkie-kubernetes.git
 
 # 2. change to project directory
 cd yorkie-kubernetes
@@ -68,7 +68,7 @@ git clone https://github.com/yorkie-team/dashboard.git
 
 # 12. clone yorkie-tldraw repository for real-time collaboration whiteboard!
 #     (change REACT_APP_YORKIE_RPC_ADDR to http://localhost)
-git clone https://github.com/Krapi0314/yorkie-tldraw.git
+git clone https://github.com/krapie/yorkie-tldraw.git
 ```
 
 ## Development
@@ -77,9 +77,9 @@ git clone https://github.com/Krapi0314/yorkie-tldraw.git
 
 - `kompose` : k8s manifests converted from yorkie docker-compose files
 - `minikube` : k8s manifests for local k8s cluster (minikube)
-  - ***istio & envoy sidecar will be implemented in later updates.***
-  - ***for now, istio is not implemented to simplify***
-    ***yorkie cluster architecture in local environment, and also instruction guide***
+  - **_istio & envoy sidecar will be implemented in later updates._**
+  - **_for now, istio is not implemented to simplify_**
+    **_yorkie cluster architecture in local environment, and also instruction guide_**
 - `monitoring` : k8s manifest for monitoring tool (prometheus & grafana)
 
 ### Minikube Structure
