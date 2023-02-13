@@ -1,6 +1,6 @@
-# yorkie-kubernetes
+# yorkie-cluster
 
-Yorkie cluster on kubernetes
+Yorkie cluster design & Kuberntes implementation
 
 ## Table of Contents
 
@@ -15,7 +15,7 @@ Yorkie cluster on kubernetes
 
 ## Getting Started
 
-If you want to setup and test yorkie cluster on k8s,
+If you want to setup and test yorkie cluster,
 just clone this repository and follow instructions bellow.
 
 ### Prerequisites
@@ -27,7 +27,7 @@ just clone this repository and follow instructions bellow.
 
 ```bash
 # 1. clone repository
-git clone https://github.com/krapie/yorkie-kubernetes.git
+git clone https://github.com/krapie/yorkie-cluster.git
 
 # 2. change to project directory
 cd yorkie-kubernetes
