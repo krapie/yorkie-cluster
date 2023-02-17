@@ -1,0 +1,73 @@
+version: "3.7"
+
+services:
+  config:
+    image: mongo
+    container_name: config
+    command: mongod --configsvr --replSet configRS --bind_ip_all
+    ports:
+      - 27019:27019
+    networks:
+      - mongo
+    volumes:
+      - config:/data/db
+
+  shard1:
+    image: mongo
+    container_name: shard1
+    command: mongod --shardsvr --replSet shard1RS --bind_ip_all
+    ports:
+      - 27017:27017
+    networks:
+      - mongo
+    volumes:
+      - shard1:/data/db
+
+  shard2:
+    image: mongo
+    container_name: shard2
+    command: mongod --shardsvr --replSet shard2RS --bind_ip_all
+    ports:
+      - 27018:27017
+    networks:
+      - mongo
+    volumes:
+      - shard2:/data/db
+
+  shard3:
+    image: mongo
+    container_name: shard3
+    command: mongod --shardsvr --replSet shard3RS --bind_ip_all
+    ports:
+      - 27016:27017
+    networks:
+      - mongo
+    volumes:
+      - shard3:/data/db
+
+  mongos1:
+    image: mongo
+    container_name: mongos1
+    command: mongos --configdb configRS/config:27019 --bind_ip_all
+    ports:
+      - 27020:27017
+    networks:
+      - mongo
+
+  mongos2:
+    image: mongo
+    container_name: mongos2
+    command: mongos --configdb configRS/config:27019 --bind_ip_all
+    ports:
+      - 27021:27017
+    networks:
+      - mongo
+
+volumes:
+  config:
+  shard1:
+  shard2:
+  shard3:
+
+networks:
+  mongo:
