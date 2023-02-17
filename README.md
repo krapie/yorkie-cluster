@@ -1,6 +1,6 @@
 # yorkie-cluster
 
-Yorkie cluster design & Kuberntes implementation
+Yorkie cluster design & Docker/Kubernetes implementation
 
 ## Table of Contents
 
@@ -8,8 +8,9 @@ Yorkie cluster design & Kuberntes implementation
   - [Prerequisites](#prerequisites)
   - [Instructions](#instructions)
 - [Development](#development)
+  - [Cluster Modes](#cluster-modes)
   - [Project Structure](#project-structure)
-  - [Minikube Structure](#minikube-structure)
+  - [Kubernetes Structure](#kubernetes-structure)
   - [About Yorkie](#about-yorkie)
 - [Roadmap](#roadmap)
 
@@ -20,8 +21,9 @@ just clone this repository and follow instructions bellow.
 
 ### Prerequisites
 
-- `minikube` : local k8s for deploying yorkie cluster in local environment
-- `kubectl` : k8s cli for deploying & testing yorkie cluster
+- `docker` : Docker system for deploying yorkie cluster in local environment
+- `minikube` : Local k8s for deploying yorkie cluster in local environment
+- `kubectl` : K8s cli for deploying & testing yorkie cluster
 
 ### Instructions
 
@@ -30,7 +32,7 @@ just clone this repository and follow instructions bellow.
 git clone https://github.com/krapie/yorkie-cluster.git
 
 # 2. change to project directory
-cd yorkie-kubernetes
+cd yorkie-cluster
 
 # 3. start minikube cluster
 minikube start
@@ -46,7 +48,7 @@ kubectl create namespace yorkie
 # kubectl config set-context --current --namespace yorkie
 
 # 7. deploy all minikube manifests in minikube cluster
-kubectl apply -f minikube --recursive
+kubectl apply -f minikube/broadcast-cluster-mode --recursive
 
 # 8. test yorkie api!
 const client = new yorkie.Client('http://localhost');
@@ -73,26 +75,42 @@ git clone https://github.com/krapie/yorkie-tldraw.git
 
 ## Development
 
+> Shard Cluster Mode PoC & Prototype implementation is in progress. For more information, follow: [Yorkie Shard Cluster Mode](./docker/shard-cluster-mode/yorkie-shard-cluster-poc-docker/README.md)
+
+### Cluster Modes
+
+There are two cluster modes implemented by docker, kompose, and kubernetes:
+
+- **Broadcast Cluster Mode** : Yorkie cluster mode based on broadcasting & pub/sub & distributed lock
+- **Shard Cluster Mode** : Yorkie cluster mode based on routing & sharding. This cluster mode is in progress
+
 ### Project Structure
 
-- `kompose` : k8s manifests converted from yorkie docker-compose files
-- `minikube` : k8s manifests for local k8s cluster (minikube)
-  - **_istio & envoy sidecar will be implemented in later updates._**
-  - **_for now, istio is not implemented to simplify_**
-    **_yorkie cluster architecture in local environment, and also instruction guide_**
-- `monitoring` : k8s manifest for monitoring tool (prometheus & grafana)
+Current project structure look like this:
 
-### Minikube Structure
+- `docker` : Docker-compose manifests for simple deployment. This folder contains two cluster modes
+  - `broadcast-cluster-mode` : Yorkie cluster mode based on broadcasting & pub/sub & distributed lock
+  - `shard-cluster-mode` : Yorkie cluster mode based on routing & sharding
+- `kompose` : K8s manifests converted from yorkie docker-compose files
+  - `broadcast-cluster-mode` : Yorkie cluster mode based on broadcasting & pub/sub & distributed lock
+- `minikube` : K8s manifests for local k8s cluster (minikube)
+  - `broadcast-cluster-mode` : Yorkie cluster mode based on broadcasting & pub/sub & distributed lock
+    - **_istio & envoy sidecar will be implemented in later updates._**
+    - **_for now, istio is not implemented to simplify_**
+      **_yorkie cluster architecture in local environment, and also instruction guide_**
+- `monitoring` : K8s manifest for monitoring tool (prometheus & grafana)
+
+### Kubernetes Structure
 
 ![argocd screenshot](./screenshot/argocd.PNG)
 
-In minikube yorie cluster, there are:
+In current kubernetes(minikube) yorkie cluster, there are:
 
-- `yorkie-ingress` : ingress (lb, gw) for routing yorkie related services
-  - `envoy-service` -> `envoy pod` : envoy proxy for web connection & routing api, 1 replica exists
-    - `yorkie-service` -> `yorkie pods` : yorkie api server, 3 replica exists
-      - `etcd-service` -> `etcd stateful pod` : etcd for cluster mode, 2 replica exists
-      - `mongo-service` -> `mongo stateful pod` : mongodb for nosql db, 1 replica exists
+- `yorkie-ingress` : Ingress (lb, gw) for routing yorkie related services
+  - `envoy-service` -> `envoy pod` : Envoy proxy for web connection & routing api, 1 replica exists
+    - `yorkie-service` -> `yorkie pods` : Yorkie api server, 3 replica exists
+      - `etcd-service` -> `etcd stateful pod` : Etcd for cluster mode, 2 replica exists
+      - `mongo-service` -> `mongo stateful pod` : Mongodb for nosql db, 1 replica exists
 
 ### About Yorkie
 
@@ -107,8 +125,10 @@ Yorkie references
 
 ## Roadmap
 
-- [x] yorkie broadcasting cluster mode on minikube (local, simple version)
-- [ ] yorkie broadcasting cluster mode on minikube (istio & envoy sidecar)
-- [ ] yorkie broadcasting cluster mode on GKE (cloud)
-- [ ] yorkie cluster mode (other architectural approach) on minikube (local)
-- [ ] yorkie cluster mode (other architectural approach) on GKE (cloud)
+- [x] Yorkie broadcast cluster mode on minikube (local, simple version)
+- [ ] Yorkie broadcast cluster mode on minikube (istio & envoy sidecar)
+- [ ] Yorkie broadcast cluster mode on GKE (cloud)
+- [ ] Yorkie shard cluster mode on docker (local)
+- [x] Yorkie shard cluster mode on minikube (local)
+- [ ] Yorkie shard cluster mode on minikube (istio & envoy sidecar)
+- [ ] Yorkie shard cluster mode on AWS (cloud)

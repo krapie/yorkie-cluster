@@ -1,0 +1,82 @@
+version: "3.3"
+
+services:
+  envoy:
+    build:
+      context: ./
+      dockerfile: ./envoy.Dockerfile
+    image: "grpcweb:envoy"
+    container_name: "envoy"
+    restart: always
+    ports:
+      - "8080:8080"
+      - "9090:9090"
+      - "9901:9901"
+    command: ["/etc/envoy/envoy.yaml"]
+    depends_on:
+      - yorkie1
+      - yorkie2
+      - yorkie3
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  yorkie1:
+    image: "yorkieteam/yorkie:latest"
+    container_name: "yorkie1"
+    command:
+      [
+        "server",
+        "--mongo-connection-uri",
+        "mongodb://mongo:27017",
+        "--enable-pprof",
+      ]
+    restart: always
+    ports:
+      - "11101:11101"
+      - "11102:11102"
+      - "11103:11103"
+    depends_on:
+      - mongo
+
+  yorkie2:
+    image: "yorkieteam/yorkie:latest"
+    container_name: "yorkie2"
+    command:
+      [
+        "server",
+        "--mongo-connection-uri",
+        "mongodb://mongo:27017",
+        "--enable-pprof",
+      ]
+    restart: always
+    ports:
+      - "11201:11101"
+      - "11202:11102"
+      - "11203:11103"
+    depends_on:
+      - mongo
+
+  yorkie3:
+    image: "yorkieteam/yorkie:latest"
+    container_name: "yorkie3"
+    command:
+      [
+        "server",
+        "--mongo-connection-uri",
+        "mongodb://mongo:27017",
+        "--enable-pprof",
+      ]
+    restart: always
+    ports:
+      - "11301:11101"
+      - "11302:11102"
+      - "11303:11103"
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    restart: always
+    ports:
+      - "27017:27017"
