@@ -1,4 +1,4 @@
-# Yorkie Shard Cluster Docker PoC
+# Yorkie LookUp Cluster Docker PoC
 
 > Warning: You need to put API Key in Yorkie Client to see proper routing!!!
 

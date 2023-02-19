@@ -75,14 +75,16 @@ git clone https://github.com/krapie/yorkie-tldraw.git
 
 ## Development
 
-> Shard Cluster Mode PoC & Prototype implementation is in progress. For more information, follow: [Yorkie Shard Cluster Mode](./docker/shard-cluster-mode/yorkie-shard-cluster-poc-docker/README.md)
+> LookUp Cluster Mode PoC & Prototype implementation is in progress. For more information, follow: [Yorkie LookUp Cluster Mode](./docker/lookup-cluster-mode/yorkie-lookup-cluster-poc-docker/README.md)
 
 ### Cluster Modes
 
 There are two cluster modes implemented by docker, kompose, and kubernetes:
 
-- **Broadcast Cluster Mode** : Yorkie cluster mode based on broadcasting & pub/sub & distributed lock
-- **Shard Cluster Mode** : Yorkie cluster mode based on routing & sharding. This cluster mode is in progress
+- **Broadcast Cluster Mode** : Yorkie cluster mode based on broadcasting & pub/sub & distributed lock. 
+For more information about the design, follow this page: [Yorkie Broadcast Cluster Mode](design/broadcast-cluster-mode.md) 
+- **LookUp Cluster Mode** : Yorkie cluster mode based on routing & sharding. This cluster mode is in progress
+For more information about the design, follow this page: [Yorkie Lookup Cluster Mode](design/lookup-cluster-mode.md)
 
 ### Project Structure
 
@@ -90,7 +92,7 @@ Current project structure look like this:
 
 - `docker` : Docker-compose manifests for simple deployment. This folder contains two cluster modes
   - `broadcast-cluster-mode` : Yorkie cluster mode based on broadcasting & pub/sub & distributed lock
-  - `shard-cluster-mode` : Yorkie cluster mode based on routing & sharding
+  - `lookup-cluster-mode` : Yorkie cluster mode based on routing & sharding
 - `kompose` : K8s manifests converted from yorkie docker-compose files
   - `broadcast-cluster-mode` : Yorkie cluster mode based on broadcasting & pub/sub & distributed lock
 - `minikube` : K8s manifests for local k8s cluster (minikube)
@@ -102,7 +104,7 @@ Current project structure look like this:
 
 ### Kubernetes Structure
 
-![argocd screenshot](./screenshot/argocd.PNG)
+![argocd screenshot](./screenshot/argocd.png)
 
 In current kubernetes(minikube) yorkie cluster, there are:
 
@@ -125,10 +127,10 @@ Yorkie references
 
 ## Roadmap
 
-- [x] Yorkie broadcast cluster mode on minikube (local, simple version)
-- [ ] Yorkie broadcast cluster mode on minikube (istio & envoy sidecar)
-- [ ] Yorkie broadcast cluster mode on GKE (cloud)
-- [ ] Yorkie shard cluster mode on docker (local)
-- [x] Yorkie shard cluster mode on minikube (local)
-- [ ] Yorkie shard cluster mode on minikube (istio & envoy sidecar)
-- [ ] Yorkie shard cluster mode on AWS (cloud)
+- [x] Yorkie Broadcast Cluster Mode on minikube (local, simple version)
+- [ ] Yorkie Broadcast Cluster Mode on minikube (istio & envoy sidecar)
+- [ ] Yorkie Broadcast Cluster Mode on GKE (cloud)
+- [ ] Yorkie LookUp Cluster Mode on docker (local)
+- [x] Yorkie LookUp Cluster Mode on minikube (local)
+- [ ] Yorkie LookUp Cluster Mode on minikube (istio & envoy sidecar)
+- [ ] Yorkie LookUp Cluster Mode on AWS (cloud)
