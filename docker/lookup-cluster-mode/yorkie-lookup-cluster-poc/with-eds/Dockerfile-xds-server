@@ -1,0 +1,12 @@
+FROM golang:1.15
+
+WORKDIR /build/xds-server
+
+COPY ./xds-server/main.go main.go
+COPY ./xds-server/go.mod go.mod
+
+RUN go mod download
+
+RUN go build -o xdsServer
+
+ENTRYPOINT [ "./xdsServer" ]

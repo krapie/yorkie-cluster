@@ -1,0 +1,114 @@
+version: "3.3"
+
+services:
+  envoy:
+    build:
+      context: ./
+      dockerfile: ./envoy.Dockerfile
+    container_name: "envoy"
+    restart: always
+    ports:
+      - "8080:8080"
+      - "9090:9090"
+      - "9901:9901"
+    command: ["/etc/envoy/envoy.yaml"]
+    depends_on:
+      - xds
+      - yorkie1
+      - yorkie2
+      - yorkie3
+    networks:
+      backend:
+        ipv4_address: 10.1.1.6
+
+  xds:
+    build:
+      context: .
+      dockerfile: Dockerfile-xds-server
+    container_name: "xds-server"
+    ports:
+      - "2345:2345"
+    networks:
+      backend:
+        ipv4_address: 10.1.1.5
+
+  yorkie1:
+    image: "yorkieteam/yorkie:latest"
+    container_name: "yorkie1"
+    command:
+      [
+        "server",
+        "--mongo-connection-uri",
+        "mongodb://mongo:27017",
+        "--enable-pprof",
+      ]
+    restart: always
+    ports:
+      - "11101:11101"
+      - "11102:11102"
+      - "11103:11103"
+    networks:
+      backend:
+        ipv4_address: 10.1.1.1
+    depends_on:
+      - mongo
+
+  yorkie2:
+    image: "yorkieteam/yorkie:latest"
+    container_name: "yorkie2"
+    command:
+      [
+        "server",
+        "--mongo-connection-uri",
+        "mongodb://mongo:27017",
+        "--enable-pprof",
+      ]
+    restart: always
+    ports:
+      - "11201:11101"
+      - "11202:11102"
+      - "11203:11103"
+    networks:
+      backend:
+        ipv4_address: 10.1.1.2
+    depends_on:
+      - mongo
+
+  yorkie3:
+    image: "yorkieteam/yorkie:latest"
+    container_name: "yorkie3"
+    command:
+      [
+        "server",
+        "--mongo-connection-uri",
+        "mongodb://mongo:27017",
+        "--enable-pprof",
+      ]
+    restart: always
+    ports:
+      - "11301:11101"
+      - "11302:11102"
+      - "11303:11103"
+    networks:
+      backend:
+        ipv4_address: 10.1.1.3
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    networks:
+      backend:
+        ipv4_address: 10.1.1.4
+
+networks:
+  backend:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 10.1.0.0/16
