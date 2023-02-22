@@ -81,10 +81,10 @@ git clone https://github.com/krapie/yorkie-tldraw.git
 
 There are two cluster modes implemented by docker, kompose, and kubernetes:
 
-- **Broadcast Cluster Mode** : Yorkie cluster mode based on broadcasting & pub/sub & distributed lock. 
-For more information about the design, follow this page: [Yorkie Broadcast Cluster Mode](design/broadcast-cluster-mode.md) 
+- **Broadcast Cluster Mode** : Yorkie cluster mode based on broadcasting & pub/sub & distributed lock.
+  For more information about the design, follow this page: [Yorkie Broadcast Cluster Mode](design/broadcast-cluster-mode.md)
 - **LookUp Cluster Mode** : Yorkie cluster mode based on routing & sharding. This cluster mode is in progress
-For more information about the design, follow this page: [Yorkie Lookup Cluster Mode](design/lookup-cluster-mode.md)
+  For more information about the design, follow this page: [Yorkie Lookup Cluster Mode](design/lookup-cluster-mode.md)
 
 ### Project Structure
 
@@ -104,7 +104,7 @@ Current project structure look like this:
 
 ### Kubernetes Structure
 
-![argocd screenshot](./screenshot/argocd.png)
+![argocd screenshot](./screenshot/argocd.PNG)
 
 In current kubernetes(minikube) yorkie cluster, there are:
 
