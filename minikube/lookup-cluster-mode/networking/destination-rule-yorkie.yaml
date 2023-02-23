@@ -1,0 +1,20 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: yorkie
+spec:
+  host: yorkie
+  trafficPolicy:
+    portLevelSettings:
+      - port:
+          number: 11101
+        # load balance yorkie sdk traffic to yorkie servers by ring hash(consistent hashing) algorithm
+        # using `x-api-key` request header as hash parameter
+        loadBalancer:
+          consistentHash:
+            httpHeaderName: "x-api-key"
+      - port:
+          number: 11103
+        # load balance yorkie admin traffic by simply send traffic to least requested server
+        loadBalancer:
+          simple: LEAST_REQUEST

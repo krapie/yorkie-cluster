@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: yorkie
+  namespace: yorkie
+  labels:
+    app: yorkie
+spec:
+  clusterIP: None
+  selector:
+    app: yorkie
+  ports:
+    ## can simply add envoy.grpc_web filter by using grpc-web appProtocol
+    ## https://github.com/istio/istio/pull/10064
+    - port: 11101
+      name: yorkie-sdk-port
+      appProtocol: grpc-web
+    - port: 11102
+      name: profiling-port
+      appProtocol: http
+    - port: 11103
+      name: yorkie-admin-port
+      appProtocol: grpc-web

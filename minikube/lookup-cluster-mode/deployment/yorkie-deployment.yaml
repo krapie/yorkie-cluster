@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: yorkie
+  namespace: yorkie
+  labels:
+    app: yorkie
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: yorkie
+  template:
+    metadata:
+      labels:
+        app: yorkie
+    spec:
+      containers:
+        - name: yorkie
+          image: yorkieteam/yorkie:0.3.0
+          args:
+            - server
+            - --mongo-connection-uri
+            - mongodb://mongo:27017
+            - --enable-pprof
+          ports:
+            - containerPort: 11101
+            - containerPort: 11102
+            - containerPort: 11103
+          # resources will be configured in later updates
+          # (need to load test to configure resource capacity)
+          resources: {}
