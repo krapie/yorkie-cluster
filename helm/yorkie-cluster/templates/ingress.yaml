@@ -1,0 +1,55 @@
+{{- if .Values.ingress.enabled -}}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: yorkie
+  namespace: istio-system
+  annotations:
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    # Set alb.ingress.kubernetes.io/certificate-arn annotation to TLS certificate's ARN issued in AWS ACM 
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-northeast-2:925728882916:certificate/4ae32f71-39df-43b6-bf19-c0428827920a
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
+    alb.ingress.kubernetes.io/backend-protocol: HTTP
+    alb.ingress.kubernetes.io/group.name: api.yorkie.dev
+    alb.ingress.kubernetes.io/group.order: '10'
+spec:
+  ingressClassName: alb
+  rules:
+    - host: api.yorkie.dev
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: istio-ingressgateway
+                port:
+                  number: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: admin
+  namespace: istio-system
+  annotations:
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    # Set alb.ingress.kubernetes.io/certificate-arn annotation to TLS certificate's ARN issued in AWS ACM 
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-northeast-2:925728882916:certificate/4ae32f71-39df-43b6-bf19-c0428827920a
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
+    alb.ingress.kubernetes.io/backend-protocol: HTTP
+    alb.ingress.kubernetes.io/group.name: api.yorkie.dev
+    alb.ingress.kubernetes.io/group.order: '3'
+spec:
+  ingressClassName: alb
+  rules:
+    - host: admin.yorkie.dev
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: istio-ingressgateway
+                port:
+                  number: 80
+{{- end }}

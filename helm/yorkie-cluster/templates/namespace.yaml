@@ -1,0 +1,6 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: yorkie
+  labels:
+    istio-injection: enabled

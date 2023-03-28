@@ -4,15 +4,16 @@ Yorkie cluster design & Docker/Kubernetes implementation
 
 ## Table of Contents
 
-- [Getting Started](#getting-started)
-  - [Prerequisites](#prerequisites)
-  - [Instructions](#instructions)
-- [Development](#development)
-  - [Cluster Modes](#cluster-modes)
-  - [Project Structure](#project-structure)
-  - [Kubernetes Structure](#kubernetes-structure)
-  - [About Yorkie](#about-yorkie)
-- [Roadmap](#roadmap)
+- [yorkie-cluster](#yorkie-cluster)
+  - [Table of Contents](#table-of-contents)
+  - [Getting Started](#getting-started)
+    - [Prerequisites](#prerequisites)
+    - [Instructions](#instructions)
+  - [Development](#development)
+    - [Cluster Modes](#cluster-modes)
+    - [Project Structure](#project-structure)
+    - [About Yorkie](#about-yorkie)
+  - [Roadmap](#roadmap)
 
 ## Getting Started
 
@@ -25,7 +26,8 @@ just clone this repository and follow instructions bellow.
 - `minikube` : Local k8s for deploying yorkie cluster in local environment
 - `kubectl` : K8s CLI for deploying & testing yorkie cluster
 - `istioctl` : Istio CLI for istio installation & service mesh
-
+- `helm` : Helm CLI for deploying yorkie cluster helm chart
+- 
 ### Instructions
 
 This instruction builds K8s & Istio based Yorkie lookup cluster mode.
@@ -35,55 +37,22 @@ This instruction builds K8s & Istio based Yorkie lookup cluster mode.
 git clone https://github.com/krapie/yorkie-cluster.git
 
 # 2. change to project directory
-cd yorkie-cluster
+cd yorkie-cluster/helm
 
 # 3. start minikube cluster
 minikube start
 
-# 4. Install Istioctl and set PATH
-curl -L https://istio.io/downloadIstio | sh -
-
-cd istio-1.17.1
-
-export PATH=$PWD/bin:$PATH
-
-# 5. Install Istio with demo profile
+# 4. Install Istio with demo profile
 istioctl install --set profile=demo -y
 
-# 6. create yorkie namespace and switch context (optional)
-kubectl create namespace yorkie
-# kubectl config set-context --current --namespace yorkie
-
-# 7. Set auto envoy sidecar injetion in namespace
-kubectl label namespace yorkie istio-injection=enabled
-
-# 5. deploy all minikube manifests in minikube cluster
-kubectl apply -f minikube/lookup-cluster-mode --recursive
+# 5. Install/Upgrade yorkie cluster helm chart
+helm install yorkie-cluster ./yorkie-cluster
 
 # 6. start minikube tunneling for local connection
 minikube tunnel
 
 # 7. test yorkie api!
 const client = new yorkie.Client('http://localhost');
-```
-
-For play with more fun stuff,
-
-```bash
-# 9. deploy monitoring tools if you want to see metrics
-#    (ignore json error, it's grafana json file, not k8s manifest file)
-kubectl apply -f monitoring --recursive
-
-# 10. enter grafana web url in your browser
-curl http://localhost
-
-# 11. clone dashboard repository for admin dashboard!
-#     (change REACT_APP_ADMIN_ADDR to http://localhost)
-git clone https://github.com/yorkie-team/dashboard.git
-
-# 12. clone yorkie-tldraw repository for real-time collaboration whiteboard!
-#     (change REACT_APP_YORKIE_RPC_ADDR to http://localhost)
-git clone https://github.com/krapie/yorkie-tldraw.git
 ```
 
 ## Development
@@ -106,6 +75,8 @@ Current project structure look like this:
 - `docker` : Docker-compose manifests for simple deployment. This folder contains two cluster modes
   - `broadcast-cluster-mode` : Yorkie broadcast cluster mode using docker-compose
   - `lookup-cluster-mode` : Yorkie lookup cluster mode using docker-compose
+- `helm` : Helm chart for Yorkie cluster deployment
+  - `yorkie-cluster` : Yorkie cluster helm chart
 - `kompose` : K8s manifests converted from yorkie docker-compose files
   - `broadcast-cluster-mode` : Yorkie broadcast cluster mode converted from docker-compose
 - `minikube` : K8s manifests for local k8s cluster (minikube)

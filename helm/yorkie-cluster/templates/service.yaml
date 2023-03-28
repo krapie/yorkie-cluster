@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: yorkie
+  namespace: yorkie
+  labels:
+    app.kubernetes.io/name: yorkie
+    app.kubernetes.io/instance: yorkie
+    app.kubernetes.io/component: server
+    app.kubernetes.io/part-of: yorkie
+    app.kubernetes.io/managed-by: istio
+spec:
+  type: NodePort
+  ports:
+  ## can simply add envoy.grpc_web filter by using grpc-web appProtocol
+  ## https://github.com/istio/istio/pull/10064
+  - name: yorkie-sdk
+    port: {{ .Values.ports.sdkPort }}
+    targetPort: {{ .Values.ports.sdkPort }}
+    appProtocol: grpc-web
+  - name: profiling
+    port: {{ .Values.ports.profilingPort }}
+    targetPort: {{ .Values.ports.profilingPort }}
+    appProtocol: http
+  - name: yorkie-admin
+    port: {{ .Values.ports.adminPort }}
+    targetPort: {{ .Values.ports.adminPort }}
+    appProtocol: grpc-web
+  selector:
+    app.kubernetes.io/instance: yorkie

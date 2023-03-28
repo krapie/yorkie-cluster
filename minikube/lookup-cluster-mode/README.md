@@ -12,30 +12,23 @@ cd yorkie-cluster
 # 3. start minikube cluster
 minikube start
 
-# 4. Install Istioctl and set PATH
-curl -L https://istio.io/downloadIstio | sh -
-
-cd istio-1.17.1
-
-export PATH=$PWD/bin:$PATH
-
-# 5. Install Istio with demo profile
+# 4. Install Istio with demo profile
 istioctl install --set profile=demo -y
 
-# 6. create yorkie namespace and switch context (optional)
+# 5. create yorkie namespace and switch context (optional)
 kubectl create namespace yorkie
 # kubectl config set-context --current --namespace yorkie
 
-# 7. Set auto envoy sidecar injetion in namespace
+# 6. Set auto envoy sidecar injetion in namespace
 kubectl label namespace yorkie istio-injection=enabled
 
-# 5. deploy all minikube manifests in minikube cluster
+# 7. deploy all minikube manifests in minikube cluster
 kubectl apply -f minikube/lookup-cluster-mode --recursive
 
-# 6. start minikube tunneling for local connection
+# 8. start minikube tunneling for local connection
 minikube tunnel
 
-# 7. test yorkie api!
+# 9. test yorkie api!
 const client = new yorkie.Client('http://localhost');
 ```
 
