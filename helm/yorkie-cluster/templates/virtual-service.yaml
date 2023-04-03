@@ -38,6 +38,7 @@ spec:
           - custom-header-1
           - grpc-status
           - grpc-message
+          - grpc-status-details-bin
         allowCredentials: true
     # route to yorkie admin service on "/yorkie.v1.AdminService" uri prefix
     - name: yorkie-admin-service

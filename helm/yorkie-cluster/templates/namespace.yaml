@@ -3,4 +3,4 @@ kind: Namespace
 metadata:
   name: yorkie
   labels:
-    istio-injection: enabled
+    # istio-injection: enabled

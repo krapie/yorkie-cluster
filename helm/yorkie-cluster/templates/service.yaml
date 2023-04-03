@@ -10,7 +10,6 @@ metadata:
     app.kubernetes.io/part-of: yorkie
     app.kubernetes.io/managed-by: istio
 spec:
-  type: NodePort
   ports:
   ## can simply add envoy.grpc_web filter by using grpc-web appProtocol
   ## https://github.com/istio/istio/pull/10064

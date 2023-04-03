@@ -8,8 +8,9 @@ metadata:
     alb.ingress.kubernetes.io/scheme: internet-facing
     # Set alb.ingress.kubernetes.io/certificate-arn annotation to TLS certificate's ARN issued in AWS ACM 
     alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-northeast-2:925728882916:certificate/4ae32f71-39df-43b6-bf19-c0428827920a
-    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS": 443}]'
     alb.ingress.kubernetes.io/backend-protocol: HTTP
+    alb.ingress.kubernetes.io/backend-protocol-version: HTTP2
     alb.ingress.kubernetes.io/group.name: api.yorkie.dev
     alb.ingress.kubernetes.io/group.order: '10'
 spec:

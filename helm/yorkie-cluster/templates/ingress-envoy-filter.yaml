@@ -1,0 +1,70 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: EnvoyFilter
+metadata:
+  name: gateway-grpc-web-filter
+  namespace: istio-system
+spec:
+  workloadSelector:
+    labels:
+      istio: ingressgateway
+  configPatches:
+    - applyTo: HTTP_FILTER
+      match:
+        context: GATEWAY
+        listener:
+          filterChain:
+            filter:
+              name: "envoy.filters.network.http_connection_manager"
+              subFilter:
+                name: "envoy.filters.http.cors"
+      patch:
+        operation: INSERT_BEFORE
+        value:
+          name: envoy.filters.http.grpc_web
+          typed_config:
+            "@type": "type.googleapis.com/envoy.extensions.filters.http.grpc_web.v3.GrpcWeb"
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: EnvoyFilter
+metadata:
+  name: gateway-shard-key-header-filter
+  namespace: istio-system
+spec:
+  workloadSelector:
+    labels:
+      istio: ingressgateway
+  configPatches:
+    - applyTo: HTTP_FILTER
+      match:
+        context: GATEWAY
+        listener:
+          filterChain:
+            filter:
+              name: "envoy.filters.network.http_connection_manager"
+              subFilter:
+                name: "envoy.filters.http.router"
+      patch:
+        operation: INSERT_BEFORE
+        value:
+          name: envoy.filters.http.lua
+          typed_config:
+            "@type": type.googleapis.com/envoy.extensions.filters.http.lua.v3.Lua
+            default_source_code:
+              inline_string:
+                function envoy_on_request(request_handle)
+                  local x_shard_key_header = request_handle:headers():get("x-shard-key")
+                  local x_api_key_header = request_handle:headers():get("x-api-key")
+
+                  if x_api_key_header == nil then
+                    request_handle:headers():add("x-api-key", "cbovg64qfu96agb5i0fg")
+                  end
+
+                  x_api_key_header = request_handle:headers():get("x-api-key")
+
+                  if x_shard_key_header == nil then
+                    request_handle:headers():add("x-shard-key", x_api_key_header)
+                  else then
+                    request_handle:headers():add("x-shard-key", x_api_key_header .. x_api_key_header)                   
+                  end
+                  
+                end

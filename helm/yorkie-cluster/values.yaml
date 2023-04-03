@@ -2,6 +2,9 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
+# Use Yorkie cluster mode
+cluster_mode: true
+
 replicaCount: 3
 
 image:
@@ -49,13 +52,14 @@ ports:
 #   port: 80
 
 consistentHash:
-  httpHeaderName: "x-api-key"
+  httpHeaderName: "x-shard-key"
   maglev:
     enabled: true
     tableSize: 65537
   ringHash:
     enabled: false
     minimumRingSize: 1024
+
 ingress:
   enabled: false
   # className: ""
@@ -109,6 +113,8 @@ allowHeaders:
   - x-accept-content-transfer-encoding
   - x-accept-response-streaming
   - x-user-agent
+  - x-yorkie-user-agent
   - x-grpc-web
   - authorization
   - x-api-key
+  - x-shard-key

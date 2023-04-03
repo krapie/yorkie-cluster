@@ -2,6 +2,7 @@ apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
   name: yorkie
+  namespace: yorkie
 spec:
   hosts:
     - "*"

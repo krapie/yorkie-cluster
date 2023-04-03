@@ -2,6 +2,7 @@ apiVersion: networking.istio.io/v1alpha3
 kind: Gateway
 metadata:
   name: yorkie-gateway
+  namespace: yorkie
 spec:
   # use istio default controller
   selector:
