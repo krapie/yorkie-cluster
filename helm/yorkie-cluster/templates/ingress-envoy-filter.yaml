@@ -1,7 +1,7 @@
 apiVersion: networking.istio.io/v1alpha3
 kind: EnvoyFilter
 metadata:
-  name: gateway-grpc-web-filter
+  name: ingress-grpc-web-filter
   namespace: istio-system
 spec:
   workloadSelector:
@@ -27,7 +27,31 @@ spec:
 apiVersion: networking.istio.io/v1alpha3
 kind: EnvoyFilter
 metadata:
-  name: gateway-shard-key-header-filter
+  name: ingress-stream-idle-timeout-filter
+  namespace: istio-system
+spec:
+  workloadSelector:
+    labels:
+      istio: ingressgateway
+  configPatches:
+    - applyTo: NETWORK_FILTER
+      match:
+        context: GATEWAY
+        listener:
+          filterChain:
+            filter:
+              name: "envoy.filters.network.http_connection_manager"
+      patch:
+        operation: MERGE
+        value:
+          typed_config:
+            "@type": "type.googleapis.com/envoy.extensions.filters.network.http_connection_manager.v3.HttpConnectionManager"
+            stream_idle_timeout: 60s
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: EnvoyFilter
+metadata:
+  name: ingress-shard-key-header-filter
   namespace: istio-system
 spec:
   workloadSelector:
@@ -56,14 +80,14 @@ spec:
                   local x_api_key_header = request_handle:headers():get("x-api-key")
 
                   if x_api_key_header == nil then
-                    request_handle:headers():add("x-api-key", "cbovg64qfu96agb5i0fg")
+                    request_handle:headers():add("x-api-key", "cglrt6ahk9mc73empl6g")
                   end
 
                   x_api_key_header = request_handle:headers():get("x-api-key")
 
                   if x_shard_key_header == nil then
                     request_handle:headers():add("x-shard-key", x_api_key_header)
-                  else then
+                  else
                     request_handle:headers():add("x-shard-key", x_api_key_header .. x_api_key_header)                   
                   end
                   

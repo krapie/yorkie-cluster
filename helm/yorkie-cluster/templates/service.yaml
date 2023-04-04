@@ -11,8 +11,9 @@ metadata:
     app.kubernetes.io/managed-by: istio
 spec:
   ports:
-  ## can simply add envoy.grpc_web filter by using grpc-web appProtocol
-  ## https://github.com/istio/istio/pull/10064
+  # even when the port name is grpc-web,
+  # envoy.grpc_web filter will only be applied in envoy sidecar
+  # So we need to explictly set grpc-web filter using EnvoyFilter in ingress gateway
   - name: yorkie-sdk
     port: {{ .Values.ports.sdkPort }}
     targetPort: {{ .Values.ports.sdkPort }}

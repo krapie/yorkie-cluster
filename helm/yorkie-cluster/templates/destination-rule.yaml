@@ -10,7 +10,7 @@ spec:
       - port:
           number: {{ .Values.ports.sdkPort }}
         # load balance yorkie sdk traffic to yorkie servers by ring hash(consistent hashing) algorithm
-        # using `x-api-key` request header as hash parameter
+        # using `x-shard-key` request header as hash parameter
         loadBalancer:
           consistentHash:
             {{- if .Values.consistentHash.maglev.enabled }}

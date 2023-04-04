@@ -14,7 +14,7 @@ cd yorkie-cluster/helm
 # 3. start minikube cluster
 minikube start
 
-# 4. Install Istio with demo profile
+# 4. Install Istio with default profile
 istioctl install --set profile=default -y
 
 # 5. Install/Upgrade yorkie cluster helm chart

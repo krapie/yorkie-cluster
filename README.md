@@ -27,7 +27,7 @@ just clone this repository and follow instructions bellow.
 - `kubectl` : K8s CLI for deploying & testing yorkie cluster
 - `istioctl` : Istio CLI for istio installation & service mesh
 - `helm` : Helm CLI for deploying yorkie cluster helm chart
-- 
+
 ### Instructions
 
 This instruction builds K8s & Istio based Yorkie lookup cluster mode.
@@ -42,8 +42,8 @@ cd yorkie-cluster/helm
 # 3. start minikube cluster
 minikube start
 
-# 4. Install Istio with demo profile
-istioctl install --set profile=demo -y
+# 4. Install Istio with default profile
+istioctl install --set profile=default -y
 
 # 5. Install/Upgrade yorkie cluster helm chart
 helm install yorkie-cluster ./yorkie-cluster

@@ -3,4 +3,7 @@ kind: Namespace
 metadata:
   name: yorkie
   labels:
+    ## Because we only need to load balance worklaods to Yorkie service,
+    ## we don't need sidecar proxy for service mesh.
+    ## We are only using Istio's ingressgateway envoy for load balancing.
     # istio-injection: enabled
