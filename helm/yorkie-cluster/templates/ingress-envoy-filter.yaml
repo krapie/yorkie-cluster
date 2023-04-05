@@ -46,7 +46,7 @@ spec:
         value:
           typed_config:
             "@type": "type.googleapis.com/envoy.extensions.filters.network.http_connection_manager.v3.HttpConnectionManager"
-            stream_idle_timeout: 60s
+            stream_idle_timeout: {{ .Values.ingressGateway.httpConnection.streamIdleTimeout }}
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: EnvoyFilter
@@ -78,17 +78,12 @@ spec:
                 function envoy_on_request(request_handle)
                   local x_shard_key_header = request_handle:headers():get("x-shard-key")
                   local x_api_key_header = request_handle:headers():get("x-api-key")
-
-                  if x_api_key_header == nil then
-                    request_handle:headers():add("x-api-key", "cglrt6ahk9mc73empl6g")
-                  end
-
-                  x_api_key_header = request_handle:headers():get("x-api-key")
-
-                  if x_shard_key_header == nil then
-                    request_handle:headers():add("x-shard-key", x_api_key_header)
-                  else
-                    request_handle:headers():add("x-shard-key", x_api_key_header .. x_api_key_header)                   
-                  end
                   
+                  if x_shard_key_header == nil then
+                    if x_api_key_header == nil then
+                      request_handle:headers():add("x-shard-key", "default")
+                    else
+                      request_handle:headers():add("x-shard-key", x_api_key_header)
+                    end
+                  end
                 end

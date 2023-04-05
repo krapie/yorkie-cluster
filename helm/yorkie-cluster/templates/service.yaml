@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: yorkie
-  namespace: yorkie
+  namespace: {{ .Values.yorkie.namespace }}
   labels:
     app.kubernetes.io/name: yorkie
     app.kubernetes.io/instance: yorkie
@@ -15,16 +15,16 @@ spec:
   # envoy.grpc_web filter will only be applied in envoy sidecar
   # So we need to explictly set grpc-web filter using EnvoyFilter in ingress gateway
   - name: yorkie-sdk
-    port: {{ .Values.ports.sdkPort }}
-    targetPort: {{ .Values.ports.sdkPort }}
+    port: {{ .Values.yorkie.ports.sdkPort }}
+    targetPort: {{ .Values.yorkie.ports.sdkPort }}
     appProtocol: grpc-web
   - name: profiling
-    port: {{ .Values.ports.profilingPort }}
-    targetPort: {{ .Values.ports.profilingPort }}
+    port: {{ .Values.yorkie.ports.profilingPort }}
+    targetPort: {{ .Values.yorkie.ports.profilingPort }}
     appProtocol: http
   - name: yorkie-admin
-    port: {{ .Values.ports.adminPort }}
-    targetPort: {{ .Values.ports.adminPort }}
+    port: {{ .Values.yorkie.ports.adminPort }}
+    targetPort: {{ .Values.yorkie.ports.adminPort }}
     appProtocol: grpc-web
   selector:
     app.kubernetes.io/instance: yorkie

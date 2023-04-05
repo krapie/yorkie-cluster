@@ -14,15 +14,18 @@ cd yorkie-cluster/helm
 # 3. start minikube cluster
 minikube start
 
-# 4. Install Istio with default profile
-istioctl install --set profile=default -y
+# 4. Fetch helm chart dependencies
+helm dependency build
 
 # 5. Install/Upgrade yorkie cluster helm chart
-helm install yorkie-cluster ./yorkie-cluster
+helm install yorkie-cluster ./yorkie-cluster --namespace istio-system --create-namespace
 
-# 6. start minikube tunneling for local connection
+# 6. Redeploy istio ingress gateway with auto injecton
+kubectl rollout restart deployment istio-ingressgateway -n istio-system
+
+# 7. start minikube tunneling for local connection
 minikube tunnel
 
-# 7. test yorkie api!
+# 8. test yorkie api!
 const client = new yorkie.Client('http://localhost');
 ```

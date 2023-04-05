@@ -2,7 +2,7 @@ apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
   name: yorkie
-  namespace: yorkie
+  namespace: {{ .Values.yorkie.namespace }}
 spec:
   hosts:
     - "*"
@@ -18,7 +18,7 @@ spec:
         - destination:
             host: yorkie
             port:
-              number: {{ .Values.ports.sdkPort }}
+              number: {{ .Values.yorkie.ports.sdkPort }}
       # set cors policy for grpc-web protocols
       corsPolicy: &apiCorsPolicy
         allowOrigin:
@@ -29,10 +29,23 @@ spec:
           - OPTIONS
           - PUT
           - DELETE
-        {{- with .Values.allowHeaders }}
         allowHeaders:
-          {{- toYaml . | nindent 10 }}
-        {{- end }}
+          - grpc-timeout
+          - content-type
+          - keep-alive
+          - user-agent
+          - cache-control
+          - content-type
+          - content-transfer-encoding
+          - custom-header-1
+          - x-accept-content-transfer-encoding
+          - x-accept-response-streaming
+          - x-user-agent
+          - x-yorkie-user-agent
+          - x-grpc-web
+          - authorization
+          - x-api-key
+          - x-shard-key
         maxAge: 1728s
         exposeHeaders:
           - custom-header-1
@@ -49,6 +62,6 @@ spec:
         - destination:
             host: yorkie
             port:
-              number: {{ .Values.ports.adminPort }}
+              number: {{ .Values.yorkie.ports.adminPort }}
       # refer to apiCorsPolicy anchor above
       corsPolicy: *apiCorsPolicy

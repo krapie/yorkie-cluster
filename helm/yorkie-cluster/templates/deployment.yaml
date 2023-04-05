@@ -2,19 +2,19 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: yorkie
-  namespace: yorkie
+  namespace: {{ .Values.yorkie.namespace }}
   labels:
     app: yorkie
     app.kubernetes.io/name: yorkie
     app.kubernetes.io/instance: yorkie
-    app.kubernetes.io/version: {{ .Values.image.tag | default .Chart.AppVersion }}
+    app.kubernetes.io/version: {{ .Values.yorkie.image.tag | default .Chart.AppVersion }}
     app.kubernetes.io/component: server
     app.kubernetes.io/part-of: yorkie
     app.kubernetes.io/managed-by: istio
-    version: {{ .Values.image.tag | default .Chart.AppVersion }}
+    version: {{ .Values.yorkie.image.tag | default .Chart.AppVersion }}
 spec:
-  {{- if not .Values.autoscaling.enabled }}
-  replicas: {{ .Values.replicaCount }}
+  {{- if not .Values.yorkie.autoscaling.enabled }}
+  replicas: {{ .Values.yorkie.autoscaling.replicaCount }}
   {{- end }}
   revisionHistoryLimit: 3
   selector:
@@ -25,29 +25,31 @@ spec:
       labels:
         app: yorkie
         app.kubernetes.io/instance: yorkie
-        app.kubernetes.io/version: {{ .Values.image.tag | default .Chart.AppVersion }}
-        version: {{ .Values.image.tag | default .Chart.AppVersion }}
+        app.kubernetes.io/version: {{ .Values.yorkie.image.tag | default .Chart.AppVersion }}
+        version: {{ .Values.yorkie.image.tag | default .Chart.AppVersion }}
       annotations:
-        sidecar.istio.io/rewriteAppHTTPProbers: "false"
         prometheus.io/scrape: "true"
-        prometheus.io/port: "{{ .Values.ports.profilingPort }}"
+        prometheus.io/port: "{{ .Values.yorkie.ports.profilingPort }}"
         prometheus.io/path: "/metrics"
     spec:
       containers:
       - name: yorkie
-        image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+        image: "{{ .Values.yorkie.image.repository }}:{{ .Values.yorkie.image.tag | default .Chart.AppVersion }}"
+        imagePullPolicy: {{ .Values.yorkie.image.pullPolicy }}
         args: [
           "server",
           "--mongo-connection-uri",
-          "mongodb://{{ .Values.args.dbUrl }}:{{ .Values.args.dbPort }}/yorkie-meta",
+          "mongodb://{{ .Values.yorkie.args.dbUrl }}:{{ .Values.yorkie.args.dbPort }}/yorkie-meta",
           "--enable-pprof",
         ]
         ports:
-          - containerPort: {{ .Values.ports.sdkPort }}
-          - containerPort: {{ .Values.ports.profilingPort }}
-          - containerPort: {{ .Values.ports.adminPort }}
+          - containerPort: {{ .Values.yorkie.ports.sdkPort }}
+          - containerPort: {{ .Values.yorkie.ports.profilingPort }}
+          - containerPort: {{ .Values.yorkie.ports.adminPort }}
         livenessProbe:
           grpc:
-            port: {{ .Values.ports.sdkPort }}
+            port: {{ .Values.yorkie.ports.sdkPort }}
           initialDelaySeconds: 10
-        resources: {}
+        resources:
+          {{- toYaml .Values.yorkie.resources | nindent 12 }}
+          

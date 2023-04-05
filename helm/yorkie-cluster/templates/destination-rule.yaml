@@ -2,28 +2,28 @@ apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule
 metadata:
   name: yorkie
-  namespace: yorkie
+  namespace: {{ .Values.yorkie.namespace }}
 spec:
   host: yorkie
   trafficPolicy:
     portLevelSettings:
       - port:
-          number: {{ .Values.ports.sdkPort }}
+          number: {{ .Values.yorkie.ports.sdkPort }}
         # load balance yorkie sdk traffic to yorkie servers by ring hash(consistent hashing) algorithm
         # using `x-shard-key` request header as hash parameter
         loadBalancer:
           consistentHash:
-            {{- if .Values.consistentHash.maglev.enabled }}
+            {{- if .Values.ingressGateway.consistentHash.maglev.enabled }}
             maglev:
-              tableSize: {{ .Values.consistentHash.maglev.tableSize }}
+              tableSize: {{ .Values.ingressGateway.consistentHash.maglev.tableSize }}
             {{- end }}
-            {{- if .Values.consistentHash.ringHash.enabled }}
+            {{- if .Values.ingressGateway.consistentHash.ringHash.enabled }}
             ringHash:
-              minimumRingSize: {{ .Values.consistentHash.ringHash.minimumRingSize }}
+              minimumRingSize: {{ .Values.ingressGateway.consistentHash.ringHash.minimumRingSize }}
             {{- end }}
-            httpHeaderName: {{ .Values.consistentHash.httpHeaderName }}
+            httpHeaderName: {{ .Values.ingressGateway.consistentHash.hashParameter }}
       - port:
-          number: {{ .Values.ports.adminPort }}
+          number: {{ .Values.yorkie.ports.adminPort }}
         # load balance yorkie admin traffic by simply send traffic to least requested server
         loadBalancer:
           simple: LEAST_REQUEST
