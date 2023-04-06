@@ -1,6 +1,7 @@
 # Configuration for Yorkie cluster
 yorkie:
-  namespace: yorkie
+  name: yorkie
+  namespace: &namespace yorkie
 
   autoscaling:
     enabled: false
@@ -12,8 +13,8 @@ yorkie:
     tag: ""
 
   args:
-    dbUrl: mongodb
-    dbPort: 27017
+    dbUrl: &mongoUrl mongodb
+    dbPort: &mongoPort 27017
 
   ports:
     sdkPort: 11101
@@ -26,20 +27,10 @@ yorkie:
 mongodb:
   enabled: true
 
-# Configuration for istio gateway dependency
-gateway:
-  name: istio-ingressgateway
-
-  service:
-    # Set ingress gateway service type to NodePort
-     # To not use Classic Load Balancer in AWS
-    type: LoadBalancer
-    #  Set Health check by ALB
-    anntoations:
-      alb.ingress.kubernetes.io/healthcheck-path: /healthz/ready
-      # Use this command to set health check port for ALB
-      # kubectl get service istio-ingressgateway -n istio-system -o jsonpath='{.spec.ports[?(@.name=="status-port")].nodePort}'
-      alb.ingress.kubernetes.io/healthcheck-port: "32665"    
+  namespace: *namespace
+  name: *mongoUrl
+  port: *mongoPort
+  storageSize: 1Gi
 
 # Configuration for istio ingress gateway
 ingressGateway:
@@ -62,10 +53,25 @@ ingressGateway:
 
   resources: {}
 
+# Configuration for istio gateway dependency
+gateway:
+  name: istio-ingressgateway
+
+  service:
+    # WARNING: Set ingress gateway service type to NodePort to use AWS ALB
+    type: LoadBalancer
+    #  Set Health check by ALB
+    anntoations:
+      alb.ingress.kubernetes.io/healthcheck-path: /healthz/ready
+      # Use this command to set health check port for ALB
+      # kubectl get service istio-ingressgateway -n istio-system -o jsonpath='{.spec.ports[?(@.name=="status-port")].nodePort}'
+      alb.ingress.kubernetes.io/healthcheck-port: "32665"    
+
 # Configuration for external gateway (eg: AWS ALB)
 externalGateway:
   alb:
     enabled: false
+    
     certArn: arn:aws:acm:ap-northeast-2:031403140314:certificate/4ae32f71-39df-43b6-bf19-c0428827920a
     apiHost: api.yorkie.dev
     adminHost: admin.yorkie.dev

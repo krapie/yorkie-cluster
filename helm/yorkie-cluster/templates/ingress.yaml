@@ -1,22 +1,22 @@
-{{- if .Values.externalGateway.alb.enabled -}}
+{{ if .Values.externalGateway.alb.enabled }}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: yorkie
+  name: {{ .Values.yorkie.name }}
   namespace: istio-system
   annotations:
     alb.ingress.kubernetes.io/scheme: internet-facing
     # Set alb.ingress.kubernetes.io/certificate-arn annotation to TLS certificate's ARN issued in AWS ACM 
-    alb.ingress.kubernetes.io/certificate-arn: {{ .Values.externalGateway.certArn }}
+    alb.ingress.kubernetes.io/certificate-arn: {{ .Values.externalGateway.alb.certArn }}
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS": 443}]'
     alb.ingress.kubernetes.io/backend-protocol: HTTP
     alb.ingress.kubernetes.io/backend-protocol-version: HTTP2
-    alb.ingress.kubernetes.io/group.name: {{ .Values.externalGateway.apiHost }}
+    alb.ingress.kubernetes.io/group.name: {{ .Values.externalGateway.alb.apiHost }}
     alb.ingress.kubernetes.io/group.order: '10'
 spec:
   ingressClassName: alb
   rules:
-    - host: {{ .Values.externalGateway.apiHost }}
+    - host: {{ .Values.externalGateway.alb.apiHost }}
       http:
         paths:
           - path: /
@@ -30,20 +30,20 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: admin
+  name: {{ .Values.yorkie.name }}-admin
   namespace: istio-system
   annotations:
     alb.ingress.kubernetes.io/scheme: internet-facing
     # Set alb.ingress.kubernetes.io/certificate-arn annotation to TLS certificate's ARN issued in AWS ACM 
-    alb.ingress.kubernetes.io/certificate-arn: {{ .Values.externalGateway.certArn }}
+    alb.ingress.kubernetes.io/certificate-arn: {{ .Values.externalGateway.alb.certArn }}
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
     alb.ingress.kubernetes.io/backend-protocol: HTTP
-    alb.ingress.kubernetes.io/group.name: {{ .Values.externalGateway.apiHost }}
+    alb.ingress.kubernetes.io/group.name: {{ .Values.externalGateway.alb.apiHost }}
     alb.ingress.kubernetes.io/group.order: '3'
 spec:
   ingressClassName: alb
   rules:
-    - host: {{ .Values.externalGateway.adminHost }}
+    - host: {{ .Values.externalGateway.alb.adminHost }}
       http:
         paths:
           - path: /
@@ -53,4 +53,4 @@ spec:
                 name: {{ .Values.gateway.name }}
                 port:
                   number: 80
-{{- end }}
+{{ end }}

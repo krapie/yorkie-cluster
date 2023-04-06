@@ -1,25 +1,25 @@
-{{- if .Values.enabled -}}
+{{ if .Values.enabled -}}
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: mongodb
-  namespace: yorkie
+  name: {{ .Values.name }}
+  namespace: {{ .Values.namespace }}
   labels:
-    app.kubernetes.io/name: mongodb
-    app.kubernetes.io/instance: mongodb
+    app.kubernetes.io/name: {{ .Values.name }}
+    app.kubernetes.io/instance: {{ .Values.name }}
     app.kubernetes.io/component: database
     app.kubernetes.io/part-of: yorkie
     app.kubernetes.io/managed-by: kubernetes
 spec:
-  serviceName: mongodb
+  serviceName: {{ .Values.name }}
   replicas: 1
   selector:
     matchLabels:
-      app.kubernetes.io/instance: mongodb
+      app.kubernetes.io/instance: {{ .Values.name }}
   template:
     metadata:
       labels:
-        app.kubernetes.io/instance: mongodb
+        app.kubernetes.io/instance: {{ .Values.name }}
     spec:
       restartPolicy: Always
       terminationGracePeriodSeconds: 60
@@ -27,20 +27,20 @@ spec:
         - name: mongodb
           image: mongo:4.4.1
           ports:
-            - containerPort: 27017
+            - containerPort: {{ .Values.port }}
           volumeMounts:
-            - name: mongo-storage
+            - name: {{ .Values.name }}-storage
               mountPath: /data/db
           # resources will be configured in later updates
           # (need to load test to configure resource capacity)
           resources: {}
   volumeClaimTemplates:
     - metadata:
-        name: mongo-storage
+        name: {{ .Values.name }}-storage
       spec:
         accessModes: ["ReadWriteOnce"]
         storageClassName: standard
         resources:
           requests:
-            storage: 1Gi
-{{- end }}
+            storage: {{ .Values.storageSize }}
+{{ end }}

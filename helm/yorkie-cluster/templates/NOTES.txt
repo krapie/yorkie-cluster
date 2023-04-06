@@ -1,0 +1,12 @@
+
+{{ .Release.Name }} successfully installed!
+
+To learn more about the release, try:
+  $ helm status {{ .Release.Name }}
+  $ helm get all {{ .Release.Name }}
+
+Next steps:
+
+--- Istio ---
+1. Redeploy istio ingress gateway with auto injecton
+$ kubectl rollout restart deployment istio-ingressgateway -n istio-system

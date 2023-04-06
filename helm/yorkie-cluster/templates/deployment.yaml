@@ -1,30 +1,30 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: yorkie
+  name: {{ .Values.yorkie.name }}
   namespace: {{ .Values.yorkie.namespace }}
   labels:
-    app: yorkie
-    app.kubernetes.io/name: yorkie
-    app.kubernetes.io/instance: yorkie
+    app: {{ .Values.yorkie.name }}
+    app.kubernetes.io/name: {{ .Values.yorkie.name }}
+    app.kubernetes.io/instance: {{ .Values.yorkie.name }}
     app.kubernetes.io/version: {{ .Values.yorkie.image.tag | default .Chart.AppVersion }}
     app.kubernetes.io/component: server
-    app.kubernetes.io/part-of: yorkie
+    app.kubernetes.io/part-of: {{ .Values.yorkie.name }}
     app.kubernetes.io/managed-by: istio
     version: {{ .Values.yorkie.image.tag | default .Chart.AppVersion }}
 spec:
-  {{- if not .Values.yorkie.autoscaling.enabled }}
+  {{ if not .Values.yorkie.autoscaling.enabled }}
   replicas: {{ .Values.yorkie.autoscaling.replicaCount }}
-  {{- end }}
+  {{ end }}
   revisionHistoryLimit: 3
   selector:
     matchLabels:
-      app.kubernetes.io/instance: yorkie
+      app.kubernetes.io/instance: {{ .Values.yorkie.name }}
   template:
     metadata:
       labels:
-        app: yorkie
-        app.kubernetes.io/instance: yorkie
+        app: {{ .Values.yorkie.name }}
+        app.kubernetes.io/instance: {{ .Values.yorkie.name }}
         app.kubernetes.io/version: {{ .Values.yorkie.image.tag | default .Chart.AppVersion }}
         version: {{ .Values.yorkie.image.tag | default .Chart.AppVersion }}
       annotations:
@@ -51,5 +51,5 @@ spec:
             port: {{ .Values.yorkie.ports.sdkPort }}
           initialDelaySeconds: 10
         resources:
-          {{- toYaml .Values.yorkie.resources | nindent 12 }}
+          {{ toYaml .Values.yorkie.resources | nindent 12 }}
           
