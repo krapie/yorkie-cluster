@@ -1,0 +1,33 @@
+{{ if .Values.argocd.enabled }}
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: {{ .Values.yorkie.name }}-app
+  namespace: {{ .Values.argocd.namespace }}
+spec:
+  project: {{ .Values.argocd.default }}
+  source:
+    repoURL: {{ .Values.argocd.source.repoURL }}
+    # Set branch to watch revision (in production, main)
+    targetRevision: {{ .Values.argocd.source.targetRevision }}
+    path: {{ .Values.argocd.source.yorkieAppPath }}
+  destination:
+    server: {{ .Values.argocd.destination.server }}
+    namespace: {{ .Values.argocd.destination.namespace }}
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: {{ .Values.monitoring.namespace }}
+  namespace: {{ .Values.argocd.namespace }}
+spec:
+  project: {{ .Values.argocd.default }}
+  source:
+    repoURL: {{ .Values.argocd.source.repoURL }}
+    # Set branch to watch revision (in production, main)
+    targetRevision: {{ .Values.argocd.source.targetRevision }}
+    path: {{ .Values.argocd.source.monitoringPath }}
+  destination:
+    server: {{ .Values.argocd.destination.server }}
+    namespace: {{ .Values.argocd.destination.namespace }}
+{{ end }}
