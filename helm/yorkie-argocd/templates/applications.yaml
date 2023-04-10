@@ -1,11 +1,10 @@
-{{ if .Values.argocd.enabled }}
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: {{ .Values.yorkie.name }}-app
-  namespace: {{ .Values.argocd.namespace }}
+  namespace: argocd
 spec:
-  project: {{ .Values.argocd.default }}
+  project: {{ .Values.argocd.project }}
   source:
     repoURL: {{ .Values.argocd.source.repoURL }}
     # Set branch to watch revision (in production, main)
@@ -18,10 +17,10 @@ spec:
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: {{ .Values.monitoring.namespace }}
-  namespace: {{ .Values.argocd.namespace }}
+  name: {{ .Values.argocd.name }}-monitoring
+  namespace: argocd
 spec:
-  project: {{ .Values.argocd.default }}
+  project: {{ .Values.argocd.project }}
   source:
     repoURL: {{ .Values.argocd.source.repoURL }}
     # Set branch to watch revision (in production, main)
@@ -30,4 +29,3 @@ spec:
   destination:
     server: {{ .Values.argocd.destination.server }}
     namespace: {{ .Values.argocd.destination.namespace }}
-{{ end }}

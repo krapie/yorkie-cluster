@@ -1,32 +1,6 @@
 apiVersion: networking.istio.io/v1alpha3
 kind: EnvoyFilter
 metadata:
-  name: ingress-grpc-web-filter
-  namespace: istio-system
-spec:
-  workloadSelector:
-    labels:
-      istio: ingressgateway
-  configPatches:
-    - applyTo: HTTP_FILTER
-      match:
-        context: GATEWAY
-        listener:
-          filterChain:
-            filter:
-              name: "envoy.filters.network.http_connection_manager"
-              subFilter:
-                name: "envoy.filters.http.cors"
-      patch:
-        operation: INSERT_BEFORE
-        value:
-          name: envoy.filters.http.grpc_web
-          typed_config:
-            "@type": "type.googleapis.com/envoy.extensions.filters.http.grpc_web.v3.GrpcWeb"
----
-apiVersion: networking.istio.io/v1alpha3
-kind: EnvoyFilter
-metadata:
   name: ingress-stream-idle-timeout-filter
   namespace: istio-system
 spec:

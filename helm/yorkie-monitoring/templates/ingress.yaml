@@ -2,26 +2,27 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ .Values.argocd.name }}
-  namespace: {{ .Values.argocd.namespace }}
+  name: {{ .Values.monitoring.name }}
+  namespace: monitoring
   annotations:
     alb.ingress.kubernetes.io/scheme: internet-facing
-    # Set alb.ingress.kubernetes.io/certificate-arn annotation to TLS certificate's ARN issued in AWS ACM 
+    # Set alb.ingress.kubernetes.io/certificate-arn annotation to TLS certificate's ARN issued in AWS ACM
     alb.ingress.kubernetes.io/certificate-arn: {{ .Values.externalGateway.alb.certArn }}
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
+    alb.ingress.kubernetes.io/backend-protocol: HTTP
     alb.ingress.kubernetes.io/group.name: {{ .Values.externalGateway.alb.apiHost }}
-    alb.ingress.kubernetes.io/group.order: '2'
+    alb.ingress.kubernetes.io/group.order: '1'
 spec:
   ingressClassName: alb
   rules:
     - host: {{ .Values.externalGateway.alb.apiHost }}
       http:
         paths:
-          - path: {{ .Values.externalGateway.alb.argoCDPath }}/
+          - path: {{ .Values.externalGateway.alb.grafanaPath }}/
             pathType: Prefix
             backend:
               service:
-                name: argocd-server
+                name: {{ .Values.monitoring.grafana.name }}
                 port:
-                  number: 80
+                  number: {{ .Values.monitoring.grafana.port }}
 {{ end }}

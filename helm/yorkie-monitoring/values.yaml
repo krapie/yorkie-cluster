@@ -6,16 +6,14 @@ yorkie:
 
 # Configuration for monitoring system
 monitoring:
-  enabled: &monitoringEnable true
-  enableEnhancements: &monitoringEnhancementsEnable false
-
   name: &monitoringName yorkie-monitoring
-  namespace: &monitoringNamespace monitoring
+
+  enableEnhancements: &monitoringEnhancementsEnable false
 
 # Configuration for manual prometheus monitoring stack
 kube-prometheus-stack:
   nameOverride: *monitoringName
-  namespaceOverride: *monitoringNamespace
+  namespaceOverride: monitoring
 
   # Configuration for alertmanager
   # ref: https://prometheus.io/docs/alerting/alertmanager/
@@ -25,7 +23,7 @@ kube-prometheus-stack:
   # Using default values from
   # ref: https://github.com/grafana/helm-charts/blob/main/charts/grafana/values.yaml
   grafana:
-    enabled: *monitoringEnable
+    enabled: true
 
     defaultDashboardsTimezone: utc
     defaultDashboardsEnabled: false
@@ -80,11 +78,11 @@ kube-prometheus-stack:
 
   # Deploy node exporter as a daemonset to all nodes
   nodeExporter:
-    enabled: *monitoringEnable
+    enabled: true
 
   # Manages Prometheus and Alertmanager components
   prometheusOperator:
-    enabled: *monitoringEnable
+    enabled: true
 
   # Configuration for thanosRuler
   thanosRuler:
@@ -92,7 +90,7 @@ kube-prometheus-stack:
   
   # Deploy a Prometheus instance
   prometheus:
-    enabled: *monitoringEnable
+    enabled: true
 
     # Use this configuration to allow servicemonitor after helm chart creation
     prometheusSpec:
@@ -113,28 +111,6 @@ kube-prometheus-stack:
               storage: 1Gi
         selector: {}
 
-# Configuration for argocd CD
-argocd:
-  enabled: false
-
-  name: yorkie-argocd
-  namespace: argocd
-
-  project: default
-
-  source:
-    repoURL: https://github.com/krapie/yorkie-cluster.git
-    targetRevision: main
-
-    yorkieAppPath: helm/yorkie-cluster
-    monitoringPath: helm/yorkie-addons
-
-    username: krapie
-    password: ghp_031403140314
-  destination:
-    server: https://kubernetes.default.svc
-    namespace: default
-
 # Configuration for external gateway (eg: AWS ALB)
 externalGateway:
   alb:
@@ -144,6 +120,5 @@ externalGateway:
     # Use same host for yorkie cluster
     apiHost: api.yorkie.dev
   
-    argoCDPath: /argocd
     grafanaPath: /grafana
 
