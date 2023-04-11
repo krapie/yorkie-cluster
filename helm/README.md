@@ -16,6 +16,9 @@ cd yorkie-cluster/helm
 # 3. start minikube cluster
 minikube start
 
+# 4. install ingress addons in minikube
+minikube addons enable ingress
+
 # 4. Fetch helm chart dependencies
 helm dependency build yorkie-cluster
 
@@ -25,11 +28,16 @@ helm install yorkie-cluster ./yorkie-cluster -n istio-system --create-namespace
 # 6. Redeploy istio ingress gateway with auto injecton
 kubectl rollout restart deployment istio-ingressgateway -n istio-system
 
-# 7. start minikube tunneling for local connection
+# 7. Append api.yorkie.local to /etc/hosts, if you are using macos, use 127.0.0.1 instead of $(minikube ip)
+vi /etc/hosts
+$(minikube ip) api.yorkie.local
+$(minikube ip) admin.yorkie.local
+
+# 8. Open minikube tunnel
 minikube tunnel
 
-# 8. test yorkie api!
-const client = new yorkie.Client('http://localhost');
+# 9. test yorkie api!
+const client = new yorkie.Client('http://api.yorkie.local');
 ```
 
 ### Install Yorkie Monitoring in minikube
@@ -43,8 +51,8 @@ helm dependency build yorkie-monitoring
 # 2. Install/Upgrade yorkie monitoring helm chart
 helm install yorkie-monitoring ./yorkie-monitoring -n monitoring --create-namespace
 
-# 3. Port-forward grafana dashboard
-kubectl port-forward -n monitoring service/yorkie-monitoring-grafana 3001:80
+# 3. Open grafana dashboard
+curl http://api.yorkie.local/grafana
 
 # 4. import yorkie grafana dashboard and go process dashboard
 curl https://grafana.com/grafana/dashboards/18451
@@ -70,8 +78,8 @@ kubectl -n argocd patch secret argocd-secret \
 # 3. Restart argocd-server
 kubectl -n argocd get pod --no-headers=true | awk '/argocd-server/{print $1}'| xargs kubectl delete -n argocd pod
 
-# 4. Port-forward grafana dashboard
-kubectl port-forward -n argocd service/argocd-server 3002:80
+# # 3. Open ArgoCD dashboard
+curl http://api.yorkie.local/argocd
 ```
 
 ### Unintall helm charts

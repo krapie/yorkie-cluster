@@ -676,11 +676,7 @@ metadata:
     app.kubernetes.io/part-of: argocd
   name: argocd-server
 spec:
-  {{ if .Values.externalGateway.alb.enabled }}
   type: NodePort
-  {{ else }}
-  type: ClusterIP
-  {{ end }}
   ports:
   - name: http
     port: 80
@@ -1360,9 +1356,9 @@ spec:
         - /usr/local/bin/argocd-server
         - --insecure
         - --basehref
-        - {{ .Values.externalGateway.alb.argoCDPath }}
+        - {{ .Values.externalGateway.argoCDPath }}
         - --rootpath
-        - {{ .Values.externalGateway.alb.argoCDPath }}
+        - {{ .Values.externalGateway.argoCDPath }}
         env:
         - name: ARGOCD_SERVER_INSECURE
           valueFrom:
