@@ -23,7 +23,7 @@ minikube addons enable ingress
 helm dependency build yorkie-cluster
 
 # 5. Install/Upgrade yorkie cluster helm chart
-helm install yorkie-cluster ./yorkie-cluster -n istio-system --create-namespace
+helm install yorkie-cluster-minikube ./yorkie-cluster -n istio-system --create-namespace
 
 # 6. Redeploy istio ingress gateway with auto injecton
 kubectl rollout restart deployment istio-ingressgateway -n istio-system
@@ -49,7 +49,7 @@ Follow above steps and install yorkie monitoring helm chart.
 helm dependency build yorkie-monitoring
 
 # 2. Install/Upgrade yorkie monitoring helm chart
-helm install yorkie-monitoring ./yorkie-monitoring -n monitoring --create-namespace
+helm install yorkie-monitoring-minikube ./yorkie-monitoring -n monitoring --create-namespace
 
 # 3. Open grafana dashboard
 curl http://api.yorkie.local/grafana
@@ -65,7 +65,7 @@ Follow above steps and install yorkie argocd helm chart.
 
 ```bash
 # 1. Install/Upgrade yorkie argocd helm chart
-helm install yorkie-argocd ./yorkie-argocd -n argocd --create-namespace
+helm install yorkie-argocd-minikube ./yorkie-argocd -n argocd --create-namespace
 
 # 2. Update admin password
 ## bcrypt(krapie)=$2a$12$hA1WjWVXcTp8ECYnMzKthuomm0HXvbh8r7FWWtKN8w4ye9CK9Mes6
